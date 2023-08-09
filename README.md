@@ -2,11 +2,13 @@
 
 A personal research project to gain intuition into convolutional neural networks (CNNs) for time series data.  
 
+(This repository is currently under construction - please check back for updates)
+
 ## 1. Introduction 
 
-This project represents an experiment to determine the feasibility of using a deep convolutional network for detection and classification of time series data in an embedded system. There is lots of information and research available regarding the use of deep CNNs for applications like natural language processing (NLP) and image classification.  However, there is much less research available regarding the use of CNNs for time series data, such as that produced by accelerometers, biometric sensors, environmental sensors and the like.  
+This project represents an experiment to determine the feasibility of using a deep convolutional network for detection and classification of time series data in an embedded system. There is a lot of information and research available regarding the use of deep CNNs for applications like natural language processing (NLP) and image classification.  However, there is much less research available regarding the use of CNNs for time series data, such as that produced by accelerometers, biometric sensors, environmental sensors and the like.  
 
-In this project, I use publicly available electrocardiogram (ECG) data from PhysioNet to train a large arrhythmia classification model, convert the model to a form that can run on an embedded system, test it with previously unseen data and measure its accuracy.  I also apply transfer learning techniques using a different, smaller ECG data set to simulate tailoring the model for a specific target device's sensor data.
+In this project, I use publicly available electrocardiogram (ECG) data from PhysioNet to train a large arrhythmia classification model, convert the model to a form that can run on an embedded system, and test it with previously unseen data and measure its accuracy.  I also apply transfer learning techniques using a different, smaller ECG data set to simulate tailoring the model for a specific target device's sensor data.
 
 I found that it is possible to detect atrial fibrillation (AFIB) with 99% accuracy in near real-time on a Raspberry Pi.
 
@@ -27,19 +29,15 @@ Training was performed on a cloud GPU virtual machine designed for deep learning
 A python script was used to run the TensorFlow Lite model on a Raspberry Pi and gather results.  
 
 ## 4. The Deep CNN Model
-The original inspiration for the deep CNN model was a project and paper from the Stanford ML Group [[3]](#ref-03) [[4]](#ref-04).  In this project, they trained a 34-layer CNN to detect arrhythmias in time series ECG.  Due to difficulties in reproducing the model for use with my dataset, I designed a different model based on a modified version of an InceptionNet classifier using parallel convolutions with different kernel sizes [[5]](#ref-05).  I also experimented with the InceptionTime architecture for time series data, but found it to be less accurate than the basic InceptionNet [[6]](#ref-06). The model also employs a ResNet architecture using skip connections at each layer [[7]](#ref-07).
+The original inspiration for the deep CNN model was a project and paper from the Stanford ML Group [[3]](#ref-03) [[4]](#ref-04).  In this project, they trained a 34-layer CNN to detect arrhythmias in time series ECG.  Due to difficulties in reproducing the model for use with my dataset, I designed a different model based on a modified version of an InceptionNet classifier using parallel convolutions with different kernel sizes [[5]](#ref-05).  I also experimented with the InceptionTime architecture for time series data, but found it to be less accurate than the basic InceptionNet for my specific application [[6]](#ref-06). The model also employs a ResNet architecture using skip connections at each layer [[7]](#ref-07).
 
 An overview of the CNN model is shown here:
 
-<figure>  
-    <img src="./images/CNN-Model-Overview.png" alt="CNN Model Overview"/>  
-    <figcaption>An overview of the deep CNN model.</figcaption>  
-</figure>  
-
+<img src="./images/CNN-Model-Overview.png" alt="CNN Model Overview"/>  
 
 The model consists of a series of inception blocks, followed by a global average pooling layer, followed by a series of fully connected layers, and a final softmax layer that provides one of four classification probabilities. 
 
-The model contains a total of five convolution layers with a total of 25 convolution blocks and four fully connected layers with a total of 212 neurons.  There are a total of 2,515,284 parameters in the model, with 2,514,004 being trainable.
+The model contains a total of five convolution layers with a total of 25 convolution blocks and four fully connected layers with a total of 212 neurons.  There are a total of 2,515,284 parameters in the model.
 
 A complete model graph can be found <a href="./images/InceptionNet-Model-Complete.png" target="_blank">here</a>.
 
@@ -91,7 +89,7 @@ Training was performed on using a batch size of 125. The convolution kernels wer
 Some interesting observations are noted:
 1. Training early stopped after only 40 epochs. Most deep CNNs in the literature would train for hundreds or even thousands of epochs.
 2. The wild validation accuracy variation in the first few epochs probably indicates that the initial learning rate was too high.
-3. The fact that validation accuracy never catches up to training accuracy indicates that overfitting is occurring. This is surprising since such a large dataset is being used.
+3. The fact that validation accuracy never catches up to training accuracy indicates that overfitting is occurring. This was surprising to me since such a large dataset is being used.
 
 If this model was intended for use in production, then some hyperparameter tuning would be performed to try to improve training results.  However, even with this initial pass, good classification results were obtained as shown by the following confusion matrices:
 
@@ -113,7 +111,7 @@ The total number of non-overlapping 30-second examples of each rhythm type in th
 | AFIB | Atrial Fibrillation | 11,064 |
 | AFL | Atrial Flutter | 190 |
 
-As a result, only N and AFIB examples were used for transfer learning.  A dataset was constructed using the following distribution:
+Due to the lack of Q and AFL examples, only N and AFIB examples were used for transfer learning.  A dataset was constructed using the following distribution:
 - N = 5,532 examples from 21 patients
 - AFIB = 5,532 examples from 23 patients
 
@@ -129,7 +127,7 @@ Due to the baseline wander, a FIR bandpass filter was applied to all examples th
 
 <img src="./images/mit-bih-fir-example.png" alt="MIT-BIH filtered ECG example"/> 
 
-This filter contains 741 taps. If it is used on a real-time ECG signal sampled at 250Hz, it would delay the signal by approximately 3 seconds.
+The FIR filter contains 741 taps. If it is used on a real-time ECG signal sampled at 250Hz, it would delay the signal by approximately 3 seconds.
 
 
 ### 7.2 Deep CNN model modifications
@@ -155,9 +153,15 @@ Results using the previously unseen test data set provided the following result:
 The deep CNN model had 99.1% accuracy classifying a simulated target sensor ECG signal as either N or AFIB.
 
 ## 8. Conversion to TensorFlow Lite
+In order to run on an embedded system, the deep CNN model must be converted to a form suitable for the target device.  This was accomplished using TensorFlow Lite, a library and toolset used for converting and deploying models on mobile devices, microcontrollers and other devices with limited memory or computational power [[11]](#ref-11).
+
+The trained deep CNN model was converted into two different python-compatible TensorFlow Lite models for comparison:
+- A non-optimized model using 32-bit floating point arithmetic
+- A size-optimized model using 16-bit floating point arithmetic
+
 
 ## 9. Raspberry Pi Results
-The TensorFlow Lite deep CNN model was run on a Raspberry Pi 4, and the following results were obtained:
+Each TensorFlow Lite deep CNN model was run on a Raspberry Pi 4 using the same test data set as in Section 7.4, and the following results were obtained:
 
 |     | Size | Math | Speed | Accuracy |
 | --- | ---- | ---- | ----- | -------- |
@@ -188,6 +192,6 @@ Additional optimizations may be possible for a bare-metal system, such as develo
 [8] Ioffe, et. al. Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift https://arxiv.org/abs/1502.03167 <a name="ref-08"></a>  
 [9] Srivastava, et. al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting https://jmlr.org/papers/v15/srivastava14a.html <a name="ref-09"></a>   
 [10] Jogin, et. al. Feature Extraction using Convolution Neural Networks (CNN) and Deep Learning https://ieeexplore.ieee.org/abstract/document/9012507 <a name="ref-10"></a>   
-[11] Clifford, et. al. AF Classification from a Short Single Lead ECG Recording: the PhysioNet/Computing in Cardiology Challenge 2017 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5978770  <a name="ref-11"></a>  
+[11] TensorFlow Lite website: https://www.tensorflow.org/lite <a name="ref-11"></a>  
 
 
