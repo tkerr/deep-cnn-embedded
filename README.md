@@ -1,4 +1,4 @@
-# Experimenting with Deep CNNs for Arrythmia Detection in Embedded Systems
+# Experimenting with Deep CNNs for Arrhythmia Detection in Embedded Systems
 
 A personal research project to gain intuition into convolutional neural networks (CNNs) for time series data.  
 
@@ -6,7 +6,7 @@ A personal research project to gain intuition into convolutional neural networks
 
 This project represents an experiment to determine the feasibility of using a deep convolutional network for detection and classification of time series data in an embedded system. There is lots of information and research available regarding the use of deep CNNs for applications like natural language processing (NLP) and image classification.  However, there is much less research available regarding the use of CNNs for time series data, such as that produced by accelerometers, biometric sensors, environmental sensors and the like.  
 
-In this project, I use publicly available electrocardiogram (ECG) data from PhysioNet to train a large arrythmia classification model, convert the model to a form that can run on an embedded system, test it with previously unseen data and measure its accuracy.  I also apply transfer learning techniques using a different, smaller ECG data set to simulate tailoring the model for a specific target device's sensor data.
+In this project, I use publicly available electrocardiogram (ECG) data from PhysioNet to train a large arrhythmia classification model, convert the model to a form that can run on an embedded system, test it with previously unseen data and measure its accuracy.  I also apply transfer learning techniques using a different, smaller ECG data set to simulate tailoring the model for a specific target device's sensor data.
 
 I found that it is possible to detect atrial fibrillation (AFIB) with 99% accuracy in near real-time on a Raspberry Pi.
 
@@ -27,14 +27,15 @@ Training was performed on a cloud GPU virtual machine designed for deep learning
 A python script was used to run the TensorFlow Lite model on a Raspberry Pi and gather results.  
 
 ## 4. The Deep CNN Model
-The original inspiration for the deep CNN model was a project and paper from the Stanford ML Group [[3]](#ref-03) [[4]](#ref-04).  In this project, they trained a 34-layer CNN to detect arrhythmias in time series ECG.  Due to difficulties in reproducing the model for use with my dataset, I designed a different model based on a modified version of an InceptionNet classifier using parallel convolutions with different kernel sizes [[5]](#ref-05).  I also experimented with the InceptionTime architecture for time series data, but found it to be less accurate than the basic InceptionNet [[6]](#ref-06) The model also employs a ResNet architecture using skip connections at each layer [[7]](#ref-07).
+The original inspiration for the deep CNN model was a project and paper from the Stanford ML Group [[3]](#ref-03) [[4]](#ref-04).  In this project, they trained a 34-layer CNN to detect arrhythmias in time series ECG.  Due to difficulties in reproducing the model for use with my dataset, I designed a different model based on a modified version of an InceptionNet classifier using parallel convolutions with different kernel sizes [[5]](#ref-05).  I also experimented with the InceptionTime architecture for time series data, but found it to be less accurate than the basic InceptionNet [[6]](#ref-06). The model also employs a ResNet architecture using skip connections at each layer [[7]](#ref-07).
 
 An overview of the CNN model is shown here:
 
-<figure>
-    <img src="./images/CNN-Model-Overview.png" alt="CNN Model Overview"/> 
-    <figcaption>An overview of the deep CNN model.</figcaption>
-</figure>
+<figure>  
+    <img src="./images/CNN-Model-Overview.png" alt="CNN Model Overview"/>  
+    <figcaption>An overview of the deep CNN model.</figcaption>  
+</figure>  
+
 
 The model consists of a series of inception blocks, followed by a global average pooling layer, followed by a series of fully connected layers, and a final softmax layer that provides one of four classification probabilities. 
 
@@ -177,16 +178,16 @@ The model size used in this project is not suitable for a "bare-metal" embedded 
 Additional optimizations may be possible for a bare-metal system, such as developing custom C/C++ code and/or using fixed point arithmetic, but further investigation would be required.
 
 ## 11. References
-[1] Icentia11k dataset: https://physionet.org/content/icentia11k-continuous-ecg/1.0 <a name="ref-01"></a>
-[2] MIT-BIH AFIB dataset: https://physionet.org/content/afdb/1.0.0  <a name="ref-02"></a>
-[3] Stanford ML Group website: https://stanfordmlgroup.github.io/projects/ecg  <a name="ref-03"></a>
-[4] Rajpurkar, et. al. Cardiologist-Level Arrythmia Detection with Convolutional Neural Networks https://arxiv.org/abs/1707.01836  <a name="ref-04"></a>
-[5] Szegedy, et. al. Going Deeper with Convolutions https://arxiv.org/abs/1409.4842  <a name="ref-05"></a>
-[6] Fawaz, et. al. InceptionTime: Finding AlexNet for Time Series Classification https://arxiv.org/abs/1909.04939  <a name="ref-06"></a>
-[7] He, et. al. Deep Residual Learning for Image Recognition https://arxiv.org/abs/1512.03385  <a name="ref-07"></a>
-[8] Ioffe, et. al. Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift https://arxiv.org/abs/1502.03167 <a name="ref-08"></a>
-[9] Srivastava, et. al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting https://jmlr.org/papers/v15/srivastava14a.html <a name="ref-09"></a> 
-[10] Jogin, et. al. Feature Extraction using Convolution Neural Networks (CNN) and Deep Learning https://ieeexplore.ieee.org/abstract/document/9012507 <a name="ref-10"></a> 
-[11] Clifford, et. al. AF Classification from a Short Single Lead ECG Recording: the PhysioNet/Computing in Cardiology Challenge 2017 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5978770  <a name="ref-11"></a>
+[1] Icentia11k dataset: https://physionet.org/content/icentia11k-continuous-ecg/1.0 <a name="ref-01"></a>  
+[2] MIT-BIH AFIB dataset: https://physionet.org/content/afdb/1.0.0  <a name="ref-02"></a>  
+[3] Stanford ML Group website: https://stanfordmlgroup.github.io/projects/ecg  <a name="ref-03"></a>  
+[4] Rajpurkar, et. al. Cardiologist-Level Arrhythmia Detection with Convolutional Neural Networks https://arxiv.org/abs/1707.01836  <a name="ref-04"></a>  
+[5] Szegedy, et. al. Going Deeper with Convolutions https://arxiv.org/abs/1409.4842  <a name="ref-05"></a>  
+[6] Fawaz, et. al. InceptionTime: Finding AlexNet for Time Series Classification https://arxiv.org/abs/1909.04939  <a name="ref-06"></a>  
+[7] He, et. al. Deep Residual Learning for Image Recognition https://arxiv.org/abs/1512.03385  <a name="ref-07"></a>  
+[8] Ioffe, et. al. Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift https://arxiv.org/abs/1502.03167 <a name="ref-08"></a>  
+[9] Srivastava, et. al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting https://jmlr.org/papers/v15/srivastava14a.html <a name="ref-09"></a>   
+[10] Jogin, et. al. Feature Extraction using Convolution Neural Networks (CNN) and Deep Learning https://ieeexplore.ieee.org/abstract/document/9012507 <a name="ref-10"></a>   
+[11] Clifford, et. al. AF Classification from a Short Single Lead ECG Recording: the PhysioNet/Computing in Cardiology Challenge 2017 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5978770  <a name="ref-11"></a>  
 
 
