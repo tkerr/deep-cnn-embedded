@@ -165,7 +165,7 @@ Each TensorFlow Lite deep CNN model was run on a Raspberry Pi 4 using the same t
 
 |     | Size | Math | Speed | Accuracy |
 | --- | ---- | ---- | ----- | -------- |
-| HP Laptop | 10.5 MB | F64 | 0.150s | 99.1% |
+| HP Laptop (Section 7.4) | 10.5 MB | F64 | 0.150s | 99.1% |
 | RPi4 - TFLite | 10.1 MB | F32 | 1.000s | 99.1% |
 | RPi4 - TFLite Optimized | 2.6 MB | F16 | 0.733s | 99.1% |
 
