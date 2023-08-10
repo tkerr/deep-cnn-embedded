@@ -2,7 +2,7 @@
 
 A personal research project to gain intuition into convolutional neural networks (CNNs) for time series data.  
 
-(This repository is currently under construction - please check back for updates)
+🚧 (This repository is currently under construction - please check back for updates) 🚧  
 
 ## 1. Introduction 
 
@@ -71,7 +71,7 @@ I used the Icentia11k Single Lead Continuous Raw Electrocardiogram Dataset from 
 I extracted an equal number of non-overlapping 30-second examples of each rhythm type for training.  Overall, 140,000 training examples were used.  Each example contained 7500 samples, and each example was normalized using a standard Z-score normalization so that each example had a mean of zero and a standard deviation of one.  Each example was one-hot encoded with its corresponding rhythm type. The traning example distribution is as follows:
 
 - N = 35,000 examples from 10,251 patients
-- Q = 35,000 examples from 20,835 patients
+- Q = 35,000 examples from 10,835 patients
 - AFIB = 35,000 examples from 725 patients
 - AFL = 35,000  examples from 490 patients
 
@@ -136,7 +136,7 @@ The deep CNN model was modified for transfer learning as follows:
 2. The previously trained parameters were loaded into the model.
 3. All inception net layer parameters were made non-trainiable, and all fully connected layer parameters were allowed to be trained.
 
-This resulted in 29,938 trainable parameters and 2,515,250 fixed (non-trainable) parameters.
+This resulted in 29,938 trainable parameters and 2,485,312 fixed (non-trainable) parameters.
 
 ### 7.3 Training
 Training was performed using a batch size of 32.  The Adam optimizer was used again, although the initial learning rate was set an order of magnitude lower than the Icentia11k training run.  The same learning rate reduction and early stopping callbacks were applied.  Training history graphs are shown here:
@@ -177,7 +177,7 @@ In particular:
 ## 10. Conclusions
 This research project showed that it is possible to run time-series predictions on a deep CNN model on an embedded system in near real-time with high accuracy.  The ECG pre-processing step of FIR filtering and Z-score normalization requires approximately 3 seconds, and the prediction step requires approximately 0.73 seconds.  In addition, accuracy on the embedded system is identical to the PC/workstation used to train and test the model.
 
-The model size used in this project is not suitable for a "bare-metal" embedded system, but it could run on an embedded Linux processor or an Android or iOS mobile device such as a cell phone or a tablet.
+The model size used in this project is not suitable for a limited memory "bare-metal" embedded system, but it could run on an embedded Linux processor or an Android or iOS mobile device such as a cell phone or a tablet.
 
 Additional optimizations may be possible for a bare-metal system, such as developing custom C/C++ code and/or using fixed point arithmetic, but further investigation would be required.
 

@@ -1,0 +1,31 @@
+# .gitignore - list of files for git to ignore
+
+# Generated files that we don't need in source control
+*.adi
+*.atr
+*.bin
+*.cof
+*.csv
+*.d
+*.dat
+*.elf
+*.exe
+*.gz
+*.hea
+*.hex
+*.ini
+*.lst
+*.map
+*.obj
+*.opt
+*.orig
+*.out
+*.tar
+*.tfrecord
+*.zip
+
+# Directories
+__pycache__/
+.ipynb_checkpoints/
+checkpoint
+
