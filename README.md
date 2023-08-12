@@ -194,4 +194,11 @@ Additional optimizations may be possible for a bare-metal system, such as develo
 [10] Jogin, et. al. Feature Extraction using Convolution Neural Networks (CNN) and Deep Learning https://ieeexplore.ieee.org/abstract/document/9012507 <a name="ref-10"></a>   
 [11] TensorFlow Lite website: https://www.tensorflow.org/lite <a name="ref-11"></a>  
 
+## 12. License
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  
+CC BY-NC-SA 4.0  
+
+This repository, as well as the Icentia11k data used to train the deep CNN model is licensed under these terms.  
+
+
 
